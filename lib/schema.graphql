@@ -1,3 +1,10 @@
+"Valida los tipos de nivel"
+enum Level { 
+  principiante
+  intermedio
+  avanzado
+}
+
 type Course {
   _id: ID!
   title: String!
@@ -5,13 +12,27 @@ type Course {
   description: String!
   topic: String
   people:[Student]
+  level:Level
 }
 
-type Student {
+interface Person {
   _id: ID!
-  name: String!
-  email: String!
-  
+  name:String!
+  email:String!
+}
+
+type Student implements Person{
+  _id: ID!
+  name:String!
+  email:String!
+  avatar:String
+}
+
+type Monitor implements Person{
+  _id: ID!
+  name:String!
+  email:String!
+  phone:String
 }
 
 type Query {
@@ -20,9 +41,9 @@ type Query {
   "Devuelve un curso"
   getCourse(id: ID!): Course
   "Devuelve todos estudiantes"
-  getStudents: [Student]
+  getPeople: [Person]
   "Devuelve un estudiante"
-  getStudent(id: ID!): Student
+  getPerson(id: ID!): Person
 
 }
 
@@ -31,10 +52,10 @@ type Mutation {
   createCourse(input: CourseInput!):Course
   "Edita un curso"
   editCourse(_id:ID!,input:CourseEditInput!):Course
-  "Crea un estudiante"
-  createStudent(input: StudentInput!):Student
-  "Edita un estudiante"
-  editStudent(_id:ID!,input:StudentEditInput!):Student
+  "Crea una persona"
+  createPerson(input: PersonInput!):Person
+  "Edita una persona"
+  editPerson(_id:ID!,input:PersonEditInput!):Person
   "Elimina un documento"
   deleteDocument(_id:ID!,collection:String):String
   "Agrega estudiante a curso"
@@ -48,9 +69,11 @@ input CourseInput {
   topic: String
 }
 
-input StudentInput { 
+input PersonInput { 
   name: String!
   email: String!
+  phone:String
+  avatar:String
 }
 
 input CourseEditInput { 
@@ -60,7 +83,9 @@ input CourseEditInput {
   topic: String
 }
 
-input StudentEditInput { 
+input PersonEditInput { 
   name: String
   email: String
+  phone:String
+  avatar:String
 }
